@@ -1,0 +1,20 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>FlashDigest - ニュース要約</title>
+</head>
+<body>
+    <h1>📰 FlashDigest</h1>
+    <form method="post">
+        <input type="text" name="url" placeholder="ニュース記事のURLを入力" size="60">
+        <button type="submit">要約する</button>
+    </form>
+
+    {% if summary %}
+        <h2>✅ 要約結果:</h2>
+        <p>{{ summary }}</p>
+    {% endif %}
+</body>
+</html>
