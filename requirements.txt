@@ -1,4 +1,4 @@
-newspaper3k
-openai
 fastapi
 uvicorn
+jinja2
+python-dotenv
