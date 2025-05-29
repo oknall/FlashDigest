@@ -1,24 +1,25 @@
 # main.py
 
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+
 from app.fetcher import fetch_article_text
 from app.summarizer import summarize_text
 
-def main():
-    print("📰 FlashDigest - ニュース要約ツール")
-    url = input(">> 要約したいニュース記事のURLを入力してください: ")
+app = FastAPI()  # ← FastAPI インスタンスが必要！
 
-    print("\n🔍 記事本文を取得中...")
-    article_text = fetch_article_text(url)
+templates = Jinja2Templates(directory="templates")
 
-    if not article_text:
-        print("⚠️ 記事の取得に失敗しました。URLが正しいか確認してください。")
-        return
+@app.get("/", response_class=HTMLResponse)
+async def form_get(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
-    print("\n🤖 要約を生成中...")
-    summary = summarize_text(article_text)
-
-    print("\n=== ✅ 要約結果 ===")
-    print(summary)
-
-if __name__ == "__main__":
-    main()
+@app.post("/", response_class=HTMLResponse)
+async def form_post(request: Request, url: str = Form(...)):
+    article = fetch_article_text(url)
+    summary = summarize_text(article)
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "summary": summary
+    })
